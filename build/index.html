@@ -12,7 +12,9 @@
   </head>
   <body>
     <h1>Whack-a-mole! <span class="score">0</span></h1>
-    <button class='button' onClick="startGame()">Start!</button>
+    <button class="button" onClick="startGameEasy()">Easy</button>
+    <button class="button" onClick="startGameMedium()">Medium</button>
+    <button class="button" onClick="startGameHard()">Hard</button>
 
     <div class="game">
       <div class="hole hole1">
@@ -59,36 +61,93 @@
         return hole;
       }
 
-      function peep() {
+      function peepEasy() {
+        const time = randomTime(400, 1000);
+        const hole = randomHole(holes);
+        hole.classList.add("up");
+        setTimeout(() => {
+          hole.classList.remove("up");
+          if (!timeUp) {
+            peepEasy();
+          }
+        }, time);
+      }
+
+      function peepMedium() {
         const time = randomTime(200, 1000);
         const hole = randomHole(holes);
         hole.classList.add("up");
         setTimeout(() => {
           hole.classList.remove("up");
           if (!timeUp) {
-            peep();
-          } 
+            peepMedium();
+          }
         }, time);
       }
 
-      function startGame() {
+      function peepHard() {
+        const time = randomTime(20, 300);
+        const hole = randomHole(holes);
+        hole.classList.add("up");
+        setTimeout(() => {
+          hole.classList.remove("up");
+          if (!timeUp) {
+            peepHard();
+          }
+        }, time);
+      }
+
+      function startGameEasy() {
+        document.getElementsByClassName('button').disabled = 'true';
         scoreBoard.textContent = 0;
         timeUp = false;
         score = 0;
-        peep();
+        peepEasy();
         setTimeout(() => {
           timeUp = true;
-        }, 30000);
+          document.getElementsByClassName('button').disabled = 'false';
+        }, 20000);
       }
 
+      function startGameMedium() {
+        hideMode = true;
+        scoreBoard.textContent = 0;
+        timeUp = false;
+        score = 0;
+        peepMedium();
+        setTimeout(() => {
+          timeUp = true;
+          hideMode = false;
+        }, 20000);
+      }
+
+      function startGameHard() {
+        hideMode = true;
+        scoreBoard.textContent = 0;
+        timeUp = false;
+        score = 0;
+        peepHard();
+        setTimeout(() => {
+          timeUp = true;
+          hideMode = false
+        }, 20000);
+      }
+
+      // function hideButtons() {
+      //   this.disabled = true;
+      //   setTimeout(() => {
+      //     this.disabled = false;
+      //   }, 20000)
+      // }
+
       function bonk(e) {
-        if(!e.isTrusted) return;
+        if (!e.isTrusted) return;
         score++;
-        this.parentNode.classList.remove('up');
+        this.parentNode.classList.remove("up");
         scoreBoard.textContent = score;
       }
 
-      moles.forEach(mole => mole.addEventListener('click', bonk));
+      moles.forEach((mole) => mole.addEventListener("click", bonk));
     </script>
   </body>
 </html>
